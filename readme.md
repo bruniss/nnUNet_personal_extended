@@ -34,19 +34,4 @@ dist from andy s ding here: https://github.com/andy-s-ding/nnUNet/tree/tbone-nnu
 nextOU topology aware losses from here: https://github.com/PengchengShi1220/NexToU?tab=readme-ov-file
 
 some have their own trainer class, some do not, i have not finished implementing most of theese 
-# gradcam, border attn unet/resencunet, resenc net incorporating some shape priors,  and unsupervised learning using UA-MT inclusion
-from https://github.com/MoriiHuang/nnUNet-UAMT-DA-GRADCAM/tree/main
 
-commands for the above
-```bash 
-### unsupervised
-nnUNetv2_plan_and_preprocess -d idx  --verify_dataset_integrity  -unsupervised True
-### base*line
-CUDA_VISIBLE_DEVICES=0  nnUNetv2_train idx  2d fold
-### attention
-CUDA_VISIBLE_DEVICES=0  nnUNetv2_train idx  2d fold -tr nnUNetTrainer -attention True
-### UA-MT
-CUDA_VISIBLE_DEVICES=0  nnUNetv2_train idx  2d fold -tr nnUNetTrainerUAMT -unsupervised True
-### Grad-CAM
-nnUNetv2_predict -i input folder -d 1 -c 3d_fullres* -o output folder -cam True
-```
