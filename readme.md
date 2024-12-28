@@ -37,6 +37,8 @@ some have their own trainer class, some do not, i have not finished implementing
 # gradcam, border attn unet/resencunet, resenc net incorporating some shape priors,  and unsupervised learning using UA-MT inclusion
 from https://github.com/MoriiHuang/nnUNet-UAMT-DA-GRADCAM/tree/main
 
+cidice from: https://github.com/lukas-folle-snkeos/nnUNet/tree/master
+
 commands for the above
 ```bash 
 ### unsupervised
