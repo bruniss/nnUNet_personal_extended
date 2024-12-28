@@ -1,6 +1,6 @@
 ## _there is a lot of broken things here!!!! dont expect this to just work, i have no idea what im doing!_ 
 
-this is working nnunetv2 extension for me (working as in a massive work in progress, most of the things here are taken from other people and lots of stuff likely does not work. i have also very likely missed some credits and for that i very much apologize, i am slowly working through better attributing all of these as i get them functional. this is intended mostly as a personal repo but if you want to use it feel free 
+this is working nnunetv2 extension for me (working as in a massive work in progress), most of the things here are taken from other people and lots of stuff likely does not work. i have also very likely missed some credits and for that i very much apologize, i am slowly working through better attributing all of these as i get them functional. this is intended mostly as a personal repo but if you want to use it feel free 
 
 many thanks to nnunet and all of the people's work i have included in here for making machine learning accesible for a person without a phd :)
 # nnunetv2
