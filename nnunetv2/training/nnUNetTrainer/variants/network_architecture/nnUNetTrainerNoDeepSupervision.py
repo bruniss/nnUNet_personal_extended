@@ -1,4 +1,5 @@
 from nnunetv2.training.nnUNetTrainer.nnUNetTrainer import nnUNetTrainer
+from nnunetv2.utilities.plans_handling.plans_handler import PlansManager, ConfigurationManager
 import torch
 
 
@@ -14,3 +15,5 @@ class nnUNetTrainerNoDeepSupervision(nnUNetTrainer):
     ):
         super().__init__(plans, configuration, fold, dataset_json, unpack_dataset, device)
         self.enable_deep_supervision = False
+
+

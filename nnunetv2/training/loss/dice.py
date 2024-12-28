@@ -4,6 +4,64 @@ import torch
 from nnunetv2.utilities.ddp_allgather import AllGatherGrad
 from torch import nn
 
+class SoftDiceLossNew(nn.Module):
+    def __init__(self, apply_nonlin: Callable = None, batch_dice: bool = False, do_bg: bool = True, smooth: float = 1.,
+                 ddp: bool = True, clip_tp: float = None):
+        """
+        """
+        super(SoftDiceLossNew, self).__init__()
+        print("***Using high recall model***")
+        self.do_bg = do_bg
+        self.batch_dice = batch_dice
+        self.apply_nonlin = apply_nonlin
+        self.smooth = smooth
+        self.clip_tp = clip_tp
+        self.ddp = ddp
+
+    def forward(self, x, y, loss_mask=None):
+        shp_x = x.shape
+
+        if self.batch_dice:
+            axes = [0] + list(range(2, len(shp_x)))
+        else:
+            axes = list(range(2, len(shp_x)))
+
+        if self.apply_nonlin is not None:
+            x = self.apply_nonlin(x)
+
+        tp, fp, fn, _ = get_tp_fp_fn_tn(x, y, axes, loss_mask, False)
+
+        if self.ddp and self.batch_dice:
+            tp = AllGatherGrad.apply(tp).sum(0)
+            fp = AllGatherGrad.apply(fp).sum(0)
+            fn = AllGatherGrad.apply(fn).sum(0)
+
+        if self.clip_tp is not None:
+            tp = torch.clip(tp, min=self.clip_tp , max=None)
+        #beta = 3
+        nominator = tp
+        denominator = tp + fn
+        #denominator_recall = tp + fp
+        dc = (nominator + self.smooth) / (torch.clip(denominator + self.smooth, 1e-8))
+        if not self.do_bg:
+            if self.batch_dice:
+                dc = dc[1:]
+            else:
+                dc = dc[:, 1:]
+        dc = dc.mean()
+        #precision =  (nominator + self.smooth) / (torch.clip(denominator + self.smooth, 1e-8))
+        #recall = (nominator + self.smooth) / (torch.clip(denominator_recall + self.smooth, 1e-8))
+        #if not self.do_bg:
+        #    if self.batch_dice:
+        #        precision = precision[1:]
+        #        recall    = recall[1:]
+        #    else:
+        #        precision = precision[:, 1:]
+        #        recall    = recall[:, 1:]
+        #precision = precision.mean()
+        #recall = recall.mean()
+        #dc = (1+beta**2)(precision * recall + self.smooth) / (torch.clip(beta**2*precision + recall + self.smooth, 1e-8))
+        return -dc
 
 class SoftDiceLoss(nn.Module):
     def __init__(self, apply_nonlin: Callable = None, batch_dice: bool = False, do_bg: bool = True, smooth: float = 1.,

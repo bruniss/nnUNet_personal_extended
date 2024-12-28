@@ -155,6 +155,22 @@ class ConfigurationManager(object):
     def pool_op_kernel_sizes(self) -> Tuple[Tuple[int, ...], ...]:
         return self.configuration['architecture']['arch_kwargs']['strides']
 
+    # @property
+    # def conv_kernel_sizes(self) -> List[List[int]]:
+    #    return self.configuration['conv_kernel_sizes']
+
+    @property
+    def unet_max_num_features(self) -> int:
+        try:
+            return self.configuration["unet_max_num_features"]
+        except KeyError:
+            try:
+                # In new format, this would be the max value in features_per_stage
+                features_per_stage = self.configuration['architecture']['arch_kwargs']['features_per_stage']
+                return max(features_per_stage)
+            except KeyError:
+                raise KeyError("Could not find unet_max_num_features in either old or new configuration format")
+
     @property
     @lru_cache(maxsize=1)
     def resampling_fn_data(self) -> Callable[
@@ -209,6 +225,62 @@ class ConfigurationManager(object):
     @property
     def previous_stage_name(self) -> Union[str, None]:
         return self.configuration.get('previous_stage')
+
+    @property
+    def UNet_class_name(self) -> str:
+        try:
+            return self.configuration["UNet_class_name"]
+        except KeyError:
+            raise KeyError("UNet_class_name not found in configuration")
+
+    @property
+    def UNet_base_num_features(self) -> int:
+        try:
+            return self.configuration["UNet_base_num_features"]
+        except KeyError:
+            # In new format, this is computed from features_per_stage in arch_kwargs
+            try:
+                features_per_stage = self.configuration['architecture']['arch_kwargs']['features_per_stage']
+                return features_per_stage[0]  # The base num features is the first stage's features
+            except KeyError:
+                raise KeyError("Could not find UNet_base_num_features in either old or new configuration format")
+
+    @property
+    def n_conv_per_stage_encoder(self) -> List[int]:
+        try:
+            return self.configuration["n_conv_per_stage_encoder"]
+        except KeyError:
+            try:
+                return self.configuration['architecture']['arch_kwargs']['n_conv_per_stage']
+            except KeyError:
+                raise KeyError("n_conv_per_stage_encoder not found in configuration")
+
+    @property
+    def n_conv_per_stage_decoder(self) -> List[int]:
+        try:
+            return self.configuration["n_conv_per_stage_decoder"]
+        except KeyError:
+            try:
+                return self.configuration['architecture']['arch_kwargs']['n_conv_per_stage_decoder']
+            except KeyError:
+                raise KeyError("n_conv_per_stage_decoder not found in configuration")
+
+    @property
+    def num_pool_per_axis(self) -> List[int]:
+        try:
+            return self.configuration["num_pool_per_axis"]
+        except KeyError:
+            raise KeyError("num_pool_per_axis not found in configuration")
+
+    @property
+    def conv_kernel_sizes(self) -> List[List[int]]:
+        try:
+            return self.configuration["conv_kernel_sizes"]
+        except KeyError:
+            try:
+                return self.configuration['architecture']['arch_kwargs']['kernel_sizes']
+            except KeyError:
+                raise KeyError("conv_kernel_sizes not found in configuration")
 
 
 class PlansManager(object):
