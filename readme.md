@@ -9,14 +9,14 @@ from here: https://github.com/MIC-DKFZ/nnUNet
 # extra network architectures
 _some configs will need to be changed for <24gb vram, noted ones i have found below_
 
-- Swin-UNETR -- reduced feature size from 48 to 24. on 200^3 volume bs2 this took 22 gb vram
-- SegResNet -- default 
+- Swin-UNETR -- reduced feature size from 48 to 24. on 200^3 volume bs2 this took 22 gb vram *working*
+- SegResNet -- default *working*
 - MedNeXt 
-- LightM-UNet -- reduced initial feature size from 32 to 8, on 200^3 this took 19gb vram
-- U-Mamba at bottleck -- default
-- U-Mamba encoder -- divided init feature by two, on 200^3 this took 16.5gb vram
+- LightM-UNet -- reduced initial feature size from 32 to 8, on 200^3 this took 19gb vram *working*
+- U-Mamba at bottleck -- default *working*
+- U-Mamba encoder -- divided init feature by two, on 200^3 this took 16.5gb vram *working*
 - SAMed -- not yet tested, 2d only
-- UNETR - defaults -- 200^3 took just over 9gb vram
+- UNETR - defaults -- 200^3 took just over 9gb vram *working*
 
 from TriALS here: https://github.com/xmed-lab/TriALS/tree/main
 
@@ -29,9 +29,9 @@ from multiple sources --
 
 some from jun ma here: https://github.com/JunMa11/SegLossOdyssey
 
-dist from andy s ding here: https://github.com/andy-s-ding/nnUNet/tree/tbone-nnunet
+dist from andy s ding here: https://github.com/andy-s-ding/nnUNet/tree/tbone-nnunet *works great, but must precompute dist maps*
 
-nextOU topology aware losses from here: https://github.com/PengchengShi1220/NexToU?tab=readme-ov-file
+nextOU topology aware losses from here: https://github.com/PengchengShi1220/NexToU?tab=readme-ov-file *not yet working*
 
 some have their own trainer class, some do not, i have not finished implementing most of theese 
 
