@@ -160,6 +160,15 @@ class ConfigurationManager(object):
     #    return self.configuration['conv_kernel_sizes']
 
     @property
+    def n_stages(self) -> int:
+        try:
+            num_stages = self.configuration['architecture']['arch_kwargs']['n_stages']
+            return num_stages
+        except KeyError:
+            raise KeyError("Could not find n_stages in configuration")
+
+
+    @property
     def unet_max_num_features(self) -> int:
         try:
             return self.configuration["unet_max_num_features"]
@@ -251,7 +260,7 @@ class ConfigurationManager(object):
             return self.configuration["n_conv_per_stage_encoder"]
         except KeyError:
             try:
-                return self.configuration['architecture']['arch_kwargs']['n_conv_per_stage']
+                return self.configuration['architecture']['arch_kwargs']['n_conv_per_stage_encoder']
             except KeyError:
                 raise KeyError("n_conv_per_stage_encoder not found in configuration")
 
@@ -281,6 +290,37 @@ class ConfigurationManager(object):
                 return self.configuration['architecture']['arch_kwargs']['kernel_sizes']
             except KeyError:
                 raise KeyError("conv_kernel_sizes not found in configuration")
+
+    @property
+    def n_blocks_per_stage(self) -> List[int]:
+        try:
+            return self.configuration["n_blocks_per_stage_encoder"]
+        except KeyError:
+            try:
+                return self.configuration['architecture']['arch_kwargs']['n_blocks_per_stage']
+            except KeyError:
+                raise KeyError("n_blocks_per_stage_encoder not found in configuration")
+
+    @property
+    def n_blocks_per_stage_encoder(self) -> List[int]:
+        try:
+            return self.configuration["n_blocks_per_stage_encoder"]
+        except KeyError:
+            try:
+                return self.configuration['architecture']['arch_kwargs']['n_blocks_per_stage_encoder']
+            except KeyError:
+                raise KeyError("n_blocks_per_stage_encoder not found in configuration")
+
+    @property
+    def n_blocks_per_stage_decoder(self) -> List[int]:
+        try:
+            return self.configuration["n_blocks_per_stage_decoder"]
+        except KeyError:
+            try:
+                return self.configuration['architecture']['arch_kwargs']['n_blocks_per_stage_decoder']
+            except KeyError:
+                raise KeyError("n_blocks_per_stage_decoder not found in configuration")
+
 
 
 class PlansManager(object):

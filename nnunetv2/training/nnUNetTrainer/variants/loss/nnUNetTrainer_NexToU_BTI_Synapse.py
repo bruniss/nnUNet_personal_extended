@@ -40,13 +40,12 @@ class nnUNetTrainer_NexToU_BTI_Synapse(nnUNetTrainer_NexToU):
 
         # Synapse(BTCV datasets):
         inclusion_list = []
-        exclusion_list = [[[1, 3, 5, 7, 8, 11, 13], [2, 4, 6, 9, 10, 12]], [[1, 3, 11, 13], [5, 7, 8]], [[1, 3], [11, 13]], [
-                    1, 3], [11, 13], [[5, 8], [7]], [5, 8], [[4, 6, 10], [2, 9, 12]], [[4, 6], [10]], [4, 6], [[9, 12], [2]], [9, 12]]
+        exclusion_list = [[1, 1]]
         
         inclusion_list = self.make_tensors(inclusion_list, self.device)
         exclusion_list = self.make_tensors(exclusion_list, self.device)
 
-        loss = DC_and_CE_and_BTI_Loss({'batch_dice': self.configuration_manager.batch_dice, 'smooth': 1e-5, 'do_bg': False, 'ddp': self.is_ddp}, {},
+        loss = DC_and_CE_and_BTI_Loss({'batch_dice': self.configuration_manager.batch_dice, 'smooth': 1e-3, 'do_bg': False, 'ddp': self.is_ddp}, {},
                                     {'dim': dim, 'connectivity': connectivity, 'inclusion': inclusion_list, 'exclusion': exclusion_list, 'min_thick': 1},
                                     weight_ce=1, weight_dice=1, weight_ti=lambda_ti, ignore_label=self.label_manager.ignore_label, dice_class=MemoryEfficientSoftDiceLoss)
 

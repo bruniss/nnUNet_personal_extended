@@ -10,6 +10,7 @@ from nnunetv2.training.loss.compound_losses import DC_and_CE_loss, DC_and_BCE_lo
 from nnunetv2.utilities.helpers import softmax_helper_dim1
 from torch import nn
 from time import time
+
 class MemoryEfficientDistDiceLoss(MemoryEfficientSoftDiceLoss):
     def __init__(self, apply_nonlin: Callable = None, batch_dice: bool = False, do_bg: bool = True, smooth: float = 1.0,
                  ddp: bool = True):

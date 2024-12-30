@@ -817,6 +817,19 @@ class nnUNetTrainer(object):
         ))
 
         transforms.append(RandomTransform(
+            BlankRectangleTransform(
+                rectangle_size=((max(1, patch_size[0] // 10), patch_size[0] // 3),
+                                (max(1, patch_size[1] // 10), patch_size[1] // 3),
+                                (max(1, patch_size[2] // 10), patch_size[2] // 3)),
+                rectangle_value=np.mean,  # keeping the mean value
+                num_rectangles=(1, 5),  # same as original
+                force_square=False,  # same as original
+                p_per_sample=0.4,  # same as original
+                p_per_channel=0.5  # same as original
+            ), apply_probability=0.5
+        ))
+
+        transforms.append(RandomTransform(
             InhomogeneousSliceIlluminationTransform(
                 num_defects=(2, 5),  # Range for number of defects
                 defect_width=(5, 20),  # Range for defect width

@@ -66,21 +66,22 @@ class nnUNetTrainer_NexToU(nnUNetTrainer):
         network_class = mapping[segmentation_network_class_name]
 
         conv_or_blocks_per_stage = {
-            'n_blocks_per_stage'
-            if network_class != ResidualEncoderUNet else 'n_blocks_per_stage': configuration_manager.n_conv_per_stage_encoder,
-            'n_blocks_per_stage_decoder': configuration_manager.n_conv_per_stage_decoder
+            # encoder is stored as "n_blocks_per_stage" in the JSON
+            'n_blocks_per_stage': self.configuration_manager.n_blocks_per_stage,
+            # decoder is stored as "n_blocks_per_stage_decoder" in the JSON
+            'n_blocks_per_stage_decoder': self.configuration_manager.n_conv_per_stage_decoder
         }
 
         # network class name!!
         model = network_class(
             input_channels=num_input_channels,
-            patch_size=configuration_manager.patch_size,
-            n_stages=num_stages,
-            features_per_stage=[min(configuration_manager.UNet_base_num_features * 2 ** i,
-                                    configuration_manager.unet_max_num_features) for i in range(num_stages)],
+            patch_size=self.configuration_manager.patch_size,
+            n_stages=self.configuration_manager.n_stages,
+            features_per_stage=[min(self.configuration_manager.UNet_base_num_features * 2 ** i,
+                                    self.configuration_manager.unet_max_num_features) for i in range(self.configuration_manager.n_stages)],
             conv_op=conv_op,
-            kernel_sizes=configuration_manager.conv_kernel_sizes,
-            strides=configuration_manager.pool_op_kernel_sizes,
+            kernel_sizes=self.configuration_manager.conv_kernel_sizes,
+            strides=self.configuration_manager.pool_op_kernel_sizes,
             num_classes=label_manager.num_segmentation_heads,
             deep_supervision=enable_deep_supervision,
             **conv_or_blocks_per_stage,

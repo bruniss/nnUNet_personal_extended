@@ -44,9 +44,7 @@ class nnUNetTrainerDiceFocalLoss(nnUNetTrainer):
         assert not self.label_manager.has_regions, "regions not supported by this trainer"
         loss = DC_and_Focal_loss({'batch_dice': self.configuration_manager.batch_dice,
                                   'smooth': 1e-5, 'do_bg': False, 'ddp': self.is_ddp},
-                                 {'alpha': 1.0, 'gamma': 2.0, 'reduction': 'mean'},
-                                  weight_focal=1, weight_dice=1,
-                                  ignore_label=self.label_manager.ignore_label, dice_class=MemoryEfficientSoftDiceLoss)
+                                 {'alpha': 1.0, 'gamma': 2.0})
         # we give each output a weight which decreases exponentially (division by 2) as the resolution decreases
         # this gives higher resolution outputs more weight in the loss
         if self.enable_deep_supervision:

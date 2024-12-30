@@ -72,7 +72,6 @@ class Skeletonize(torch.nn.Module):
                 img[:, :, x_offset::2, y_offset::2, z_offset::2] = torch.min(img[:, :, x_offset::2, y_offset::2, z_offset::2].clone(), 1 - deletion_candidates)
 
         img = self._prepare_output(img)
-
         return img
 
 
@@ -99,7 +98,7 @@ class Skeletonize(torch.nn.Module):
             raise Exception("Image values must lie between 0 and 1.")
 
         img = F.pad(img, (1, 1, 1, 1, 1, 1), value=0)
-        
+
         return img
 
 
@@ -138,6 +137,7 @@ class Skeletonize(torch.nn.Module):
                           [[1.0, 1.0, 1.0],
                            [1.0, 1.0, 1.0],
                            [1.0, 1.0, 1.0]]], device=img.device).view(1, 1, 3, 3, 3)
+
 
         num_twentysix_neighbors = F.conv3d(img, K)
         condition1 = F.hardtanh(-(num_twentysix_neighbors - 2), min_val=0, max_val=1) # 1 or fewer neigbors
